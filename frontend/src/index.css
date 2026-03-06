@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.color-empty {
+  fill: #2d2d2d;
+}
+
+.color-profit {
+  fill: #22c55e;
+}
+
+.color-loss {
+  fill: #ef4444;
+}
