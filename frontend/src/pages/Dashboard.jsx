@@ -4,11 +4,14 @@ import Sidebar from "../components/Sidebar";
 import SummaryCards from "../components/SummaryCards";
 import { useEffect, useRef, useState } from "react";
 import MarketHeatmap from "../components/MarketHeatmap";
+import axios from "axios";
 
 function Dashboard() {
 
   const chartRef = useRef(null);
   const navigate = useNavigate();
+
+  const API = "https://tradejournal-backend-uwpp.onrender.com";
 
   const [chartSymbol, setChartSymbol] = useState("NASDAQ:AAPL");
   const [chartSearch, setChartSearch] = useState("");
@@ -30,31 +33,37 @@ function Dashboard() {
 
   }, []);
 
-  // LOAD BALANCE
+  // LOAD TRADES FROM BACKEND
   useEffect(() => {
 
-    const storedBalance =
-      Number(localStorage.getItem("balance")) || 10000;
-
-    localStorage.setItem("balance", storedBalance);
-
-    setBalance(storedBalance);
-
-    calculateCapital();
+    fetchTrades();
 
   }, []);
 
-  // CAPITAL USED
-  const calculateCapital = () => {
+  const fetchTrades = async () => {
 
-    const trades =
-      JSON.parse(localStorage.getItem("trades")) || [];
+    try {
+
+      const res = await axios.get(`${API}/api/trades`);
+
+      calculateCapital(res.data);
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
+
+  };
+
+  // CAPITAL USED
+  const calculateCapital = (trades) => {
 
     let capital = 0;
 
     trades.forEach(trade => {
 
-      if (trade.status === "OPEN") {
+      if (!trade.exitPrice) {
         capital += trade.entryPrice * trade.quantity;
       }
 
