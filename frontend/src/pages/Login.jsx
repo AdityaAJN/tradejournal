@@ -4,10 +4,13 @@ import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
 
+  const navigate = useNavigate();
+
+  const API = "https://tradejournal-backend-uwpp.onrender.com";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
 
@@ -18,13 +21,12 @@ function Login() {
 
     try {
 
-      const res = await axios.post(
-        "https://tradejournal-backend-uwpp.onrender.com/api/auth/login",
-        {
-          email,
-          password
-        }
-      );
+      setLoading(true);
+
+      const res = await axios.post(`${API}/api/auth/login`, {
+        email,
+        password
+      });
 
       console.log("LOGIN RESPONSE:", res.data);
 
@@ -36,9 +38,16 @@ function Login() {
 
     } catch (err) {
 
-      console.error(err);
-      alert("Login failed");
+      console.error("Login error:", err);
 
+      if (err.response) {
+        alert(err.response.data.message || "Invalid credentials");
+      } else {
+        alert("Server not responding. Try again in a few seconds.");
+      }
+
+    } finally {
+      setLoading(false);
     }
 
   };
@@ -56,6 +65,7 @@ function Login() {
         <input
           className="w-full p-3 mb-3 rounded text-black"
           placeholder="Email"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
@@ -63,17 +73,18 @@ function Login() {
           type="password"
           className="w-full p-3 mb-4 rounded text-black"
           placeholder="Password"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
         <button
           className="w-full bg-green-600 hover:bg-green-700 p-3 rounded"
           onClick={handleLogin}
+          disabled={loading}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
 
-        {/* REGISTER LINK */}
         <p className="text-gray-400 mt-5 text-center">
           Don't have an account?
           <Link
@@ -89,6 +100,7 @@ function Login() {
     </div>
 
   );
+
 }
 
 export default Login;
