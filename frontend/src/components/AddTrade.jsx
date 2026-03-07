@@ -20,19 +20,23 @@ function AddTrade() {
 
     try {
 
-      await axios.post(`${API}/api/trades`, {
-
+      const res = await axios.post(`${API}/api/trades`, {
         symbol: symbol,
         entryPrice: Number(entryPrice),
         exitPrice: exitPrice ? Number(exitPrice) : null,
         quantity: Number(quantity),
         notes: notes
-
       });
 
-      alert("Trade added successfully");
+      console.log(res.data);
 
-      window.location.reload();
+      alert("Trade Added Successfully");
+
+      setSymbol("");
+      setEntryPrice("");
+      setExitPrice("");
+      setQuantity("");
+      setNotes("");
 
     } catch (err) {
 
@@ -48,41 +52,41 @@ function AddTrade() {
     <div className="space-y-3">
 
       <input
-        className="bg-gray-900 border border-gray-700 p-2 rounded w-full"
+        className="bg-white text-black p-2 rounded w-full"
         placeholder="Symbol"
         value={symbol}
-        onChange={(e)=>setSymbol(e.target.value)}
+        onChange={(e) => setSymbol(e.target.value)}
       />
 
       <input
-        className="bg-gray-900 border border-gray-700 p-2 rounded w-full"
+        className="bg-white text-black p-2 rounded w-full"
         placeholder="Entry Price"
         type="number"
         value={entryPrice}
-        onChange={(e)=>setEntryPrice(e.target.value)}
+        onChange={(e) => setEntryPrice(e.target.value)}
       />
 
       <input
-        className="bg-gray-900 border border-gray-700 p-2 rounded w-full"
+        className="bg-white text-black p-2 rounded w-full"
         placeholder="Exit Price (optional)"
         type="number"
         value={exitPrice}
-        onChange={(e)=>setExitPrice(e.target.value)}
+        onChange={(e) => setExitPrice(e.target.value)}
       />
 
       <input
-        className="bg-gray-900 border border-gray-700 p-2 rounded w-full"
+        className="bg-white text-black p-2 rounded w-full"
         placeholder="Quantity"
         type="number"
         value={quantity}
-        onChange={(e)=>setQuantity(e.target.value)}
+        onChange={(e) => setQuantity(e.target.value)}
       />
 
       <textarea
-        className="bg-gray-900 border border-gray-700 p-2 rounded w-full"
+        className="bg-white text-black p-2 rounded w-full"
         placeholder="Notes"
         value={notes}
-        onChange={(e)=>setNotes(e.target.value)}
+        onChange={(e) => setNotes(e.target.value)}
       />
 
       <button
