@@ -19,7 +19,7 @@ function Register() {
 
     try {
 
-      await axios.post("https://tradejournal-backend.onrender.com", {
+      await axios.post("https://tradejournal-backend-uwpp.onrender.com/api/auth/register", {
         username,
         email,
         password

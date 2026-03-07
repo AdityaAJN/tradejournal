@@ -19,7 +19,7 @@ function Login() {
     try {
 
       const res = await axios.post(
-        "https://tradejournal-backend.onrender.com",
+        "https://tradejournal-backend-uwpp.onrender.com/api/auth/login",
         {
           email,
           password
