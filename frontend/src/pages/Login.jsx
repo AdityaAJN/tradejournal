@@ -19,7 +19,7 @@ function Login() {
     try {
 
       const res = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        "https://tradejournal-backend.onrender.com",
         {
           email,
           password
