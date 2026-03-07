@@ -6,7 +6,7 @@ import com.aditya.tradejournal.repository.TradeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+
 import java.util.List;
 
 @Service
@@ -21,34 +21,23 @@ public class TradeService {
 
         if (request.getExitPrice() != null) {
 
-            if (request.getTradeType().name().equals("BUY")) {
-
-                profitLoss =
-                        (request.getExitPrice() - request.getEntryPrice())
-                                * request.getQuantity();
-
-            } else {
-
-                profitLoss =
-                        (request.getEntryPrice() - request.getExitPrice())
-                                * request.getQuantity();
-
-            }
+            profitLoss =
+                    (request.getExitPrice() - request.getEntryPrice())
+                            * request.getQuantity();
 
         }
 
         Trade trade = Trade.builder()
                 .symbol(request.getSymbol())
-                .tradeType(request.getTradeType())
                 .entryPrice(request.getEntryPrice())
                 .exitPrice(request.getExitPrice())
                 .quantity(request.getQuantity())
                 .profitLoss(profitLoss)
-                .tradeDate(LocalDate.now())
                 .notes(request.getNotes())
                 .build();
 
         return tradeRepository.save(trade);
+
     }
 
     public List<Trade> getAllTrades() {

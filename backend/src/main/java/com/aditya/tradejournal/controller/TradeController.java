@@ -17,12 +17,30 @@ public class TradeController {
 
     @PostMapping
     public Trade addTrade(@RequestBody TradeRequest request) {
+
         return tradeService.addTrade(request);
+
     }
 
     @GetMapping
     public List<Trade> getTrades() {
+
         return tradeService.getAllTrades();
+
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteTrade(@PathVariable Long id) {
+
+        tradeService.deleteTrade(id);
+
+    }
+
+    @DeleteMapping
+    public void deleteAllTrades() {
+
+        tradeService.deleteAllTrades();
+
     }
 
 }
