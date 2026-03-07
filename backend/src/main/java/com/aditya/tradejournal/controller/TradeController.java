@@ -32,4 +32,14 @@ public com.aditya.tradejournal.dto.TradeSummaryResponse getSummary(
         @AuthenticationPrincipal User user) {
     return tradeService.getSummary(user);
 }
+@DeleteMapping("/{id}")
+public void deleteTrade(@PathVariable Long id,
+                        @AuthenticationPrincipal User user) {
+    tradeService.deleteTrade(id, user);
+}
+
+@DeleteMapping
+public void deleteAllTrades(@AuthenticationPrincipal User user) {
+    tradeService.deleteAllTrades(user);
+}
 }

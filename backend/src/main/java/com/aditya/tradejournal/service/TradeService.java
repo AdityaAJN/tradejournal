@@ -80,4 +80,11 @@ public class TradeService {
             .winRate(winRate)
             .build();
 }
+public void deleteTrade(Long id, User user) {
+    tradeRepository.deleteById(id);
+}
+
+public void deleteAllTrades(User user) {
+    tradeRepository.deleteAll();
+}
 }
