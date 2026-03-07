@@ -2,10 +2,8 @@ package com.aditya.tradejournal.controller;
 
 import com.aditya.tradejournal.dto.TradeRequest;
 import com.aditya.tradejournal.entity.Trade;
-import com.aditya.tradejournal.entity.User;
 import com.aditya.tradejournal.service.TradeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,28 +16,13 @@ public class TradeController {
     private final TradeService tradeService;
 
     @PostMapping
-    public Trade addTrade(@RequestBody TradeRequest request,
-                          @AuthenticationPrincipal User user) {
-        return tradeService.addTrade(request, user);
+    public Trade addTrade(@RequestBody TradeRequest request) {
+        return tradeService.addTrade(request);
     }
 
     @GetMapping
-    public List<Trade> getTrades(@AuthenticationPrincipal User user) {
-        return tradeService.getUserTrades(user);
+    public List<Trade> getTrades() {
+        return tradeService.getAllTrades();
     }
-    @GetMapping("/summary")
-public com.aditya.tradejournal.dto.TradeSummaryResponse getSummary(
-        @AuthenticationPrincipal User user) {
-    return tradeService.getSummary(user);
-}
-@DeleteMapping("/{id}")
-public void deleteTrade(@PathVariable Long id,
-                        @AuthenticationPrincipal User user) {
-    tradeService.deleteTrade(id, user);
-}
 
-@DeleteMapping
-public void deleteAllTrades(@AuthenticationPrincipal User user) {
-    tradeService.deleteAllTrades(user);
-}
 }
