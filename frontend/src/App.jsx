@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Trades from "./pages/Trades";
 import Performance from "./pages/Performance";
-import Replay from "./pages/Replay";   
-
+import Replay from "./pages/Replay";
 
 function App() {
 
@@ -15,7 +16,11 @@ function App() {
 
       <Routes>
 
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Home />} />
+
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/register" element={<Register />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
 
@@ -23,8 +28,7 @@ function App() {
 
         <Route path="/performance" element={<Performance />} />
 
-        {/* NEW FEATURE */}
-       <Route path="/replay" element={<Replay />} />
+        <Route path="/replay" element={<Replay />} />
 
       </Routes>
 

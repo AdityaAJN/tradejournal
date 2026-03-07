@@ -1,4 +1,13 @@
 import { useEffect, useState } from "react";
+import {
+  TrendingUp,
+  TrendingDown,
+  Percent,
+  Activity,
+  BarChart3,
+  Trophy,
+  AlertTriangle
+} from "lucide-react";
 
 function SummaryCards() {
 
@@ -47,7 +56,6 @@ function SummaryCards() {
     const worstTrade =
       Math.min(...trades.map(t => t.pnl));
 
-    // MAX DRAWDOWN CALCULATION
     let equity = 0;
     let peak = 0;
     let maxDrawdown = 0;
@@ -79,72 +87,91 @@ function SummaryCards() {
 
   }, []);
 
+  const card =
+    "bg-gray-900 border border-gray-800 p-5 rounded-xl shadow hover:shadow-lg transition";
+
+  const label =
+    "text-gray-400 text-sm mb-1 flex items-center gap-2";
+
+  const value =
+    "text-2xl font-bold";
+
   return (
 
-    <div className="grid grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
 
-      {/* Total Trades */}
-      <div className="bg-gray-800 p-5 rounded-xl shadow">
-        <h3 className="text-gray-400 text-sm">Total Trades</h3>
-        <p className="text-2xl font-bold text-white">
+      <div className={card}>
+        <div className={label}>
+          <Activity size={16}/> Total Trades
+        </div>
+        <p className={`${value} text-white`}>
           {summary.totalTrades}
         </p>
       </div>
 
-      {/* Net PnL */}
-      <div className="bg-gray-800 p-5 rounded-xl shadow">
-        <h3 className="text-gray-400 text-sm">Net PnL</h3>
-        <p className={`text-2xl font-bold ${
-          summary.netPnL >= 0 ? "text-green-400" : "text-red-400"
+      <div className={card}>
+        <div className={label}>
+          <TrendingUp size={16}/> Net PnL
+        </div>
+        <p className={`${value} ${
+          summary.netPnL >= 0
+            ? "text-green-400"
+            : "text-red-400"
         }`}>
           ₹{summary.netPnL}
         </p>
       </div>
 
-      {/* Win Rate */}
-      <div className="bg-gray-800 p-5 rounded-xl shadow">
-        <h3 className="text-gray-400 text-sm">Win Rate</h3>
-        <p className="text-2xl font-bold text-white">
+      <div className={card}>
+        <div className={label}>
+          <Percent size={16}/> Win Rate
+        </div>
+        <p className={`${value} text-white`}>
           {summary.winRate}%
         </p>
       </div>
 
-      {/* Avg Trade */}
-      <div className="bg-gray-800 p-5 rounded-xl shadow">
-        <h3 className="text-gray-400 text-sm">Avg Trade</h3>
-        <p className="text-2xl font-bold text-white">
+      <div className={card}>
+        <div className={label}>
+          <BarChart3 size={16}/> Avg Trade
+        </div>
+        <p className={`${value} text-white`}>
           ₹{summary.avgTrade}
         </p>
       </div>
 
-      {/* Profit Factor */}
-      <div className="bg-gray-800 p-5 rounded-xl shadow">
-        <h3 className="text-gray-400 text-sm">Profit Factor</h3>
-        <p className="text-2xl font-bold text-white">
+      <div className={card}>
+        <div className={label}>
+          <TrendingUp size={16}/> Profit Factor
+        </div>
+        <p className={`${value} text-blue-400`}>
           {summary.profitFactor}
         </p>
       </div>
 
-      {/* Best Trade */}
-      <div className="bg-gray-800 p-5 rounded-xl shadow">
-        <h3 className="text-gray-400 text-sm">Best Trade</h3>
-        <p className="text-2xl font-bold text-green-400">
+      <div className={card}>
+        <div className={label}>
+          <Trophy size={16}/> Best Trade
+        </div>
+        <p className={`${value} text-green-400`}>
           ₹{summary.bestTrade}
         </p>
       </div>
 
-      {/* Worst Trade */}
-      <div className="bg-gray-800 p-5 rounded-xl shadow">
-        <h3 className="text-gray-400 text-sm">Worst Trade</h3>
-        <p className="text-2xl font-bold text-red-400">
+      <div className={card}>
+        <div className={label}>
+          <TrendingDown size={16}/> Worst Trade
+        </div>
+        <p className={`${value} text-red-400`}>
           ₹{summary.worstTrade}
         </p>
       </div>
 
-      {/* Max Drawdown */}
-      <div className="bg-gray-800 p-5 rounded-xl shadow">
-        <h3 className="text-gray-400 text-sm">Max Drawdown</h3>
-        <p className="text-2xl font-bold text-red-400">
+      <div className={card}>
+        <div className={label}>
+          <AlertTriangle size={16}/> Max Drawdown
+        </div>
+        <p className={`${value} text-red-400`}>
           ₹{summary.maxDrawdown}
         </p>
       </div>
@@ -152,6 +179,7 @@ function SummaryCards() {
     </div>
 
   );
+
 }
 
 export default SummaryCards;

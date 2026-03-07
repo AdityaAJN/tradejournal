@@ -126,38 +126,38 @@ function Dashboard() {
 
   return (
 
-    <div className="flex bg-gray-900 min-h-screen">
+    <div className="flex bg-gray-950 min-h-screen text-white">
 
       <Sidebar />
 
-      <div className="flex-1 p-6">
+      <div className="flex-1 p-8">
 
         {/* ACCOUNT PANEL */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
-          <div className="bg-gray-800 p-5 rounded-xl shadow text-white">
-            <h3 className="text-gray-400 text-sm">
+          <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">
+            <h3 className="text-gray-400 text-sm mb-1">
               Account Balance
             </h3>
-            <p className="text-2xl text-green-400 font-bold">
+            <p className="text-3xl text-green-400 font-bold">
               ₹{balance.toFixed(2)}
             </p>
           </div>
 
-          <div className="bg-gray-800 p-5 rounded-xl shadow text-white">
-            <h3 className="text-gray-400 text-sm">
+          <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">
+            <h3 className="text-gray-400 text-sm mb-1">
               Capital Used
             </h3>
-            <p className="text-2xl font-bold">
+            <p className="text-3xl font-bold">
               ₹{capitalUsed.toFixed(2)}
             </p>
           </div>
 
-          <div className="bg-gray-800 p-5 rounded-xl shadow text-white">
-            <h3 className="text-gray-400 text-sm">
+          <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">
+            <h3 className="text-gray-400 text-sm mb-1">
               Available Balance
             </h3>
-            <p className="text-2xl text-green-400 font-bold">
+            <p className="text-3xl text-green-400 font-bold">
               ₹{(balance - capitalUsed).toFixed(2)}
             </p>
           </div>
@@ -167,20 +167,22 @@ function Dashboard() {
         {/* SUMMARY */}
         <SummaryCards />
 
-        {/* MARKET HEATMAP */}
-        <div className="bg-gray-800 p-5 rounded-xl shadow mb-6">
-          <h2 className="text-white text-lg mb-3">
+        {/* HEATMAP */}
+        <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow mb-8">
+
+          <h2 className="text-lg font-semibold mb-4">
             Market Heatmap
           </h2>
 
           <MarketHeatmap />
+
         </div>
 
         {/* CHART SEARCH */}
-        <div className="relative mb-4">
+        <div className="relative mb-5">
 
           <input
-            className="p-2 rounded w-72"
+            className="bg-gray-900 border border-gray-700 p-3 rounded-lg w-72 focus:outline-none focus:border-blue-500"
             placeholder="Search Symbol (AAPL, TSLA)"
             value={chartSearch}
             onChange={(e) => searchChartSymbol(e.target.value)}
@@ -188,13 +190,13 @@ function Dashboard() {
 
           {chartSuggestions.length > 0 && (
 
-            <div className="absolute bg-gray-700 text-white mt-1 rounded w-72 shadow-lg z-10">
+            <div className="absolute bg-gray-900 border border-gray-700 mt-2 rounded-lg w-72 shadow-lg z-10">
 
               {chartSuggestions.map((item) => (
 
                 <div
                   key={item.symbol}
-                  className="p-2 hover:bg-gray-600 cursor-pointer"
+                  className="p-3 hover:bg-gray-800 cursor-pointer"
                   onClick={() => {
                     setChartSymbol(item.symbol);
                     setChartSearch(item.symbol);
@@ -213,9 +215,9 @@ function Dashboard() {
         </div>
 
         {/* MARKET CHART */}
-        <div className="bg-gray-800 p-5 rounded-xl shadow mb-6">
+        <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow mb-8">
 
-          <h2 className="text-white text-lg mb-3">
+          <h2 className="text-lg font-semibold mb-4">
             Market Chart
           </h2>
 
@@ -224,7 +226,15 @@ function Dashboard() {
         </div>
 
         {/* ADD TRADE */}
-        <AddTrade />
+        <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">
+
+          <h2 className="text-lg font-semibold mb-4">
+            Add Trade
+          </h2>
+
+          <AddTrade />
+
+        </div>
 
       </div>
 
