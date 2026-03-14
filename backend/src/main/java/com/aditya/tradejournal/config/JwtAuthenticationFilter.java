@@ -20,23 +20,26 @@ import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
+
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+protected void doFilterInternal(HttpServletRequest request,
+                                HttpServletResponse response,
+                                FilterChain filterChain)
+        throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
+    final String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        filterChain.doFilter(request, response);
+        return;
+    }
+
+    try {
 
         String token = authHeader.substring(7);
         String email = jwtUtil.extractEmail(token);
@@ -52,12 +55,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 null,
                                 Collections.emptyList()
                         );
-
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
-        filterChain.doFilter(request, response);
+    } catch (Exception e) {
+        // Token invalid/expired — just continue without authentication
+        System.out.println("JWT Filter error: " + e.getMessage());
     }
-}
+
+    filterChain.doFilter(request, response);
+}}
