@@ -16,46 +16,54 @@ public class TradeService {
 
     private final TradeRepository tradeRepository;
 
+    public Trade addTrade(TradeRequest request) {
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !(authentication.getPrincipal() instanceof User)) {
+            throw new RuntimeException("Not authenticated");
+        }
+
+        User user = (User) authentication.getPrincipal();
+
+        double profitLoss = 0.0;
+        if (request.getExitPrice() != null) {
+            profitLoss = (request.getExitPrice() - request.getEntryPrice()) * request.getQuantity();
+        }
+
+        Trade trade = Trade.builder()
+                .symbol(request.getSymbol())
+                .tradeType(request.getTradeType())
+                .tradeDate(request.getTradeDate())
+                .entryPrice(request.getEntryPrice())
+                .exitPrice(request.getExitPrice())
+                .quantity(request.getQuantity())
+                .profitLoss(profitLoss)
+                .notes(request.getNotes())
+                .user(user)
+                .build();
+
+        return tradeRepository.save(trade);
+    }
+
     public List<Trade> getAllTrades() {
 
-    var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    // If not properly authenticated, return empty list
-    if (authentication == null || !(authentication.getPrincipal() instanceof User)) {
-        return List.of();
+        if (authentication == null || !(authentication.getPrincipal() instanceof User)) {
+            return List.of();
+        }
+
+        User user = (User) authentication.getPrincipal();
+        return tradeRepository.findByUser(user);
     }
 
-    User user = (User) authentication.getPrincipal();
-    return tradeRepository.findByUser(user);
-}
-
-public Trade addTrade(TradeRequest request) {
-
-    var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (authentication == null || !(authentication.getPrincipal() instanceof User)) {
-        throw new RuntimeException("Not authenticated");
+    // ✅ These two were missing — added back
+    public void deleteTrade(Long id) {
+        tradeRepository.deleteById(id);
     }
 
-    User user = (User) authentication.getPrincipal();
-
-    double profitLoss = 0.0;
-    if (request.getExitPrice() != null) {
-        profitLoss = (request.getExitPrice() - request.getEntryPrice()) * request.getQuantity();
+    public void deleteAllTrades() {
+        tradeRepository.deleteAll();
     }
-
-    Trade trade = Trade.builder()
-            .symbol(request.getSymbol())
-            .tradeType(request.getTradeType())
-            .tradeDate(request.getTradeDate())
-            .entryPrice(request.getEntryPrice())
-            .exitPrice(request.getExitPrice())
-            .quantity(request.getQuantity())
-            .profitLoss(profitLoss)
-            .notes(request.getNotes())
-            .user(user)
-            .build();
-
-    return tradeRepository.save(trade);
-}
 }
