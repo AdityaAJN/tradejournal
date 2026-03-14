@@ -24,53 +24,43 @@ function Dashboard() {
 
   // LOGIN CHECK
   useEffect(() => {
-
     const token = localStorage.getItem("token");
-
     if (!token) {
       navigate("/");
     }
-
   }, []);
 
   // LOAD TRADES FROM BACKEND
   useEffect(() => {
-
     fetchTrades();
-
   }, []);
 
   const fetchTrades = async () => {
-
     try {
-
-      const res = await axios.get(`${API}/api/trades`);
-
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`${API}/api/trades`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       calculateCapital(res.data);
-
     } catch (err) {
-
       console.error(err);
-
     }
-
   };
 
-  // CAPITAL USED
+  // CAPITAL USED + BALANCE
   const calculateCapital = (trades) => {
-
     let capital = 0;
+    let pnl = 0;
 
     trades.forEach(trade => {
-
       if (!trade.exitPrice) {
         capital += trade.entryPrice * trade.quantity;
       }
-
+      pnl += trade.profitLoss;
     });
 
     setCapitalUsed(capital);
-
+    setBalance(10000 + pnl);
   };
 
   // TRADINGVIEW CHART
@@ -116,19 +106,13 @@ function Dashboard() {
     }
 
     try {
-
       const res = await fetch(
         `https://finnhub.io/api/v1/search?q=${value}&token=${API_KEY}`
       );
-
       const data = await res.json();
-
       setChartSuggestions(data.result.slice(0, 5));
-
     } catch (err) {
-
       console.error(err);
-
     }
 
   };
@@ -145,27 +129,21 @@ function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
           <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">
-            <h3 className="text-gray-400 text-sm mb-1">
-              Account Balance
-            </h3>
+            <h3 className="text-gray-400 text-sm mb-1">Account Balance</h3>
             <p className="text-3xl text-green-400 font-bold">
               ₹{balance.toFixed(2)}
             </p>
           </div>
 
           <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">
-            <h3 className="text-gray-400 text-sm mb-1">
-              Capital Used
-            </h3>
+            <h3 className="text-gray-400 text-sm mb-1">Capital Used</h3>
             <p className="text-3xl font-bold">
               ₹{capitalUsed.toFixed(2)}
             </p>
           </div>
 
           <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">
-            <h3 className="text-gray-400 text-sm mb-1">
-              Available Balance
-            </h3>
+            <h3 className="text-gray-400 text-sm mb-1">Available Balance</h3>
             <p className="text-3xl text-green-400 font-bold">
               ₹{(balance - capitalUsed).toFixed(2)}
             </p>
@@ -178,13 +156,8 @@ function Dashboard() {
 
         {/* HEATMAP */}
         <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow mb-8">
-
-          <h2 className="text-lg font-semibold mb-4">
-            Market Heatmap
-          </h2>
-
+          <h2 className="text-lg font-semibold mb-4">Market Heatmap</h2>
           <MarketHeatmap />
-
         </div>
 
         {/* CHART SEARCH */}
@@ -198,11 +171,8 @@ function Dashboard() {
           />
 
           {chartSuggestions.length > 0 && (
-
             <div className="absolute bg-gray-900 border border-gray-700 mt-2 rounded-lg w-72 shadow-lg z-10">
-
               {chartSuggestions.map((item) => (
-
                 <div
                   key={item.symbol}
                   className="p-3 hover:bg-gray-800 cursor-pointer"
@@ -214,35 +184,22 @@ function Dashboard() {
                 >
                   {item.symbol} — {item.description}
                 </div>
-
               ))}
-
             </div>
-
           )}
 
         </div>
 
         {/* MARKET CHART */}
         <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow mb-8">
-
-          <h2 className="text-lg font-semibold mb-4">
-            Market Chart
-          </h2>
-
+          <h2 className="text-lg font-semibold mb-4">Market Chart</h2>
           <div ref={chartRef}></div>
-
         </div>
 
         {/* ADD TRADE */}
         <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">
-
-          <h2 className="text-lg font-semibold mb-4">
-            Add Trade
-          </h2>
-
+          <h2 className="text-lg font-semibold mb-4">Add Trade</h2>
           <AddTrade />
-
         </div>
 
       </div>
