@@ -1,212 +1,277 @@
-# 📒 Trade Journal
-
-> A personal trading journal to log, analyze, and improve trading performance — built around Smart Money Concepts (SMC) and Market Structure analysis.
-
+📈 Trade Journal
+Professional Trading Analytics & Performance Tracking System
 
 
----
 
-## 📖 Table of Contents
 
-- [About](#about)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Screenshots](#screenshots)
-- [Project Structure](#project-structure)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
----
 
-## 📌 About
 
-**Trade Journal** is a full-stack web/mobile application designed to help traders systematically log their trades, track profit & loss, review chart setups, and identify patterns in their trading behavior. It is especially tailored for traders who follow **Smart Money Concepts (SMC)**, **ICT methodology**, and **price action-based** strategies.
 
-The goal is simple — trade smarter by reviewing every trade with discipline and data.
 
----
 
-## ✨ Features
+A full-stack trading journal application designed to help traders track, analyze, and improve their trading performance through structured trade logging and performance analytics.
 
-- 📝 **Trade Logging** — Record entry/exit price, lot size, instrument, direction (Long/Short), and session
-- 💰 **P&L Tracker** — Auto-calculate profit/loss per trade with cumulative performance summary
-- 📊 **Performance Dashboard** — Win rate, risk-reward ratio, drawdown, expectancy metrics
-- 🏗️ **SMC / Market Structure Notes** — Tag trades with concepts like BOS, CHoCH, OB, FVG, Liquidity grabs
-- 🖼️ **Chart Screenshot Uploads** — Attach before/after chart images for post-trade review
-- 📆 **Session & Timeframe Filtering** — Filter by London, New York, or Asia session; filter by M15, H1, H4, Daily
-- 📈 **TradingView Integration** *(planned)* — Embed or link TradingView chart snapshots
-- 🗒️ **Trade Notes & Emotion Tagging** — Log mindset, mistakes, and lessons learned per trade
-- 🔐 **User Authentication** — Secure login/signup with JWT or OAuth
+This project replicates the workflow used by professional traders who maintain a systematic trade log to analyze strategies, measure risk, and improve decision making.
 
----
+🚀 Live Features
+📊 Trade Logging
 
-## 🛠 Tech Stack
+Record new trades instantly
 
-| Layer        | Technology                  |
-|--------------|-----------------------------|
-| Frontend     | React.js / Flutter           |
-| Backend      | Python (Django REST) / Node.js |
-| Database     | PostgreSQL / Firebase        |
-| Auth         | JWT / Firebase Auth          |
-| File Storage | AWS S3 / Cloudinary          |
-| Charts       | Chart.js / Recharts          |
-| Deployment   | Vercel (Frontend) / Render (Backend) |
+Store entry price, exit price, quantity
 
-> *(Update this table to match your actual stack)*
+Track long and short positions
 
----
+Add notes for strategies or mistakes
 
-## 🚦 Getting Started
+Edit and delete trades
 
-### Prerequisites
+📈 Performance Dashboard
 
-```bash
-node >= 18.x       # If using React frontend
-python >= 3.10     # If using Django backend
-git
-```
+Total Profit & Loss tracking
 
-### Installation
+Win/Loss ratio
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-username/trade-journal.git
-   cd trade-journal
-   ```
+Trade performance summary
 
-2. **Backend Setup**
-   ```bash
-   cd backend
-   pip install -r requirements.txt
-   cp .env.example .env
-   # Add your DB credentials and secret keys in .env
-   python manage.py migrate
-   python manage.py runserver
-   ```
+Key statistics displayed using dashboard cards
 
-3. **Frontend Setup**
-   ```bash
-   cd frontend
-   npm install
-   cp .env.example .env
-   # Add your API base URL in .env
-   npm start
-   ```
+📉 Market Visualization
 
-4. **Access the app**
-   ```
-   Frontend: http://localhost:3000
-   Backend API: http://localhost:8000/api/
-   ```
+Interactive market heatmap
 
----
+Quick overview of market sentiment
 
-## 💻 Usage
+Helps traders identify sector performance
 
-### Logging a Trade
+📑 Trade History
 
-1. Click **"New Trade"** from the dashboard
-2. Fill in: Instrument, Direction, Entry, Stop Loss, Take Profit, Lot Size
-3. Tag the **SMC concept** used (e.g., Order Block, FVG, BOS)
-4. Upload your **chart screenshot** (before & after)
-5. Add post-trade notes and emotion tag
-6. Hit **Save** — your P&L and stats update automatically
+Full trade history log
 
-### Reviewing Performance
+Organized tabular display
 
-- Navigate to **Dashboard** to see:
-  - Total trades, Win %, Avg RR, Max Drawdown
-  - Daily / Weekly / Monthly P&L chart
-  - Best and worst performing instruments/sessions
+Easy review of past trades
 
----
+⚡ Fast API Communication
 
-## 📸 Screenshots
+REST API architecture
 
-> *(Add your screenshots here)*
+Axios based frontend communication
 
-| Dashboard | Trade Log Entry |
-|-----------|-----------------|
-| ![Dashboard](screenshots/dashboard.png) | ![Trade Log](screenshots/trade-log.png) |
+Real-time UI updates
 
-| SMC Tags | Performance Chart |
-|----------|-------------------|
-| ![SMC](screenshots/smc-tags.png) | ![Chart](screenshots/performance.png) |
+🖥️ Tech Stack
+Frontend
 
----
+React.js
 
-## 📁 Project Structure
+JavaScript (ES6+)
 
-```
-trade-journal/
-├── backend/
-│   ├── trades/
-│   │   ├── models.py
-│   │   ├── views.py
-│   │   ├── serializers.py
-│   │   └── urls.py
-│   ├── users/
-│   ├── manage.py
-│   └── requirements.txt
+HTML5
+
+CSS3
+
+Axios
+
+React Router
+
+Backend
+
+Node.js
+
+Express.js
+
+REST API Architecture
+
+Database
+
+MongoDB (or SQL depending on implementation)
+
+Development Tools
+
+Git
+
+GitHub
+
+VS Code
+
+Postman
+
+npm
+
+🏗️ System Architecture
+          ┌───────────────────┐
+          │    React Frontend │
+          │  (UI Components)  │
+          └─────────▲─────────┘
+                    │
+                    │ Axios / REST API
+                    │
+          ┌─────────▼─────────┐
+          │   Node.js Server  │
+          │    Express API    │
+          └─────────▲─────────┘
+                    │
+                    │ Database Queries
+                    │
+          ┌─────────▼─────────┐
+          │     Database      │
+          │ MongoDB / MySQL   │
+          └───────────────────┘
+
+📂 Project Structure
+trade-journal
 │
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── TradeForm/
-│   │   │   ├── Dashboard/
-│   │   │   └── Charts/
-│   │   ├── pages/
-│   │   ├── utils/
-│   │   └── App.jsx
-│   └── package.json
+├── backend
+│   ├── controllers
+│   │     tradeController.js
+│   │
+│   ├── routes
+│   │     tradeRoutes.js
+│   │
+│   ├── models
+│   │     tradeModel.js
+│   │
+│   └── server.js
 │
-├── screenshots/
-├── .env.example
+├── frontend
+│   ├── components
+│   │     AddTrade.js
+│   │     Sidebar.js
+│   │     SummaryCards.js
+│   │     MarketHeatmap.js
+│   │
+│   ├── pages
+│   │     Dashboard.js
+│   │
+│   ├── services
+│   │     api.js
+│   │
+│   └── App.js
+│
 └── README.md
-```
 
----
+⚙️ Installation Guide
+1️⃣ Clone the Repository
+git clone https://github.com/yourusername/trade-journal.git
 
-## 🗺️ Roadmap
-
-- [x] Trade log CRUD operations
-- [x] P&L calculation per trade
-- [x] SMC concept tagging
-- [ ] Chart screenshot upload
-- [ ] Performance analytics dashboard
-- [ ] TradingView chart embed
-- [ ] Mobile app (Flutter)
-- [ ] Export trades to CSV / PDF
-- [ ] AI-based trade feedback *(future)*
-
----
-
-## 🤝 Contributing
-
-Pull requests are welcome! For major changes, please open an issue first to discuss what you'd like to change.
-
-1. Fork the repo
-2. Create your branch: `git checkout -b feature/your-feature`
-3. Commit: `git commit -m "feat: add your feature"`
-4. Push: `git push origin feature/your-feature`
-5. Open a Pull Request
-
----
+2️⃣ Backend Setup
+cd backend
+npm install
 
 
-## 📬 Contact
+Run the backend server
 
-**Aditya**  
-📧 adityajiwan16@gmail.com 
-🔗 [LinkedIn](https://linkedin.com/in/adityajiwan)  
-🐙 [GitHub](https://github.com/AdityaAJN)
+npm start
 
----
+3️⃣ Frontend Setup
+cd frontend
+npm install
 
-> *"The goal of a good trader is not to make money — it's to make good decisions. The money follows."*
+
+Start the React application
+
+npm start
+
+📊 Example Trade Record
+Trade	Entry	Exit	Quantity	Result
+BTC/USDT	40000	42000	0.5	+1000
+ETH/USDT	2500	2400	1	-100
+🎯 Project Objectives
+
+The goal of this project is to build a professional trade tracking system that:
+
+Helps traders maintain discipline
+
+Enables data-driven decision making
+
+Tracks profitability and strategy performance
+
+Improves trading consistency
+
+🔮 Future Enhancements
+Planned Features
+
+🔐 User Authentication (JWT)
+
+📊 Advanced trading analytics
+
+📉 TradingView chart integration
+
+🧠 Strategy tagging
+
+📷 Trade screenshot upload
+
+📱 Mobile responsive UI
+
+☁️ Cloud deployment
+
+🌐 Deployment (Optional)
+
+The application can be deployed using:
+
+Frontend
+
+Vercel
+
+Netlify
+
+Backend
+
+Render
+
+Railway
+
+AWS
+
+Database
+
+MongoDB Atlas
+
+📸 Screenshots (Recommended)
+
+Add screenshots of:
+
+Dashboard
+Trade Entry Form
+Trade History
+Market Heatmap
+
+
+Example:
+
+/screenshots/dashboard.png
+/screenshots/add-trade.png
+/screenshots/history.png
+
+👨‍💻 Author
+
+Aditya Jiwan
+
+Computer Engineering Student
+Interested in
+
+Software Development
+
+Trading Systems
+
+Data Analytics
+
+⭐ Contribution
+
+Contributions are welcome!
+
+If you want to improve the project:
+
+Fork the repository
+
+Create a feature branch
+
+Commit your changes
+
+Open a pull request
+
+📜 License
+
+This project is licensed under the MIT License.
