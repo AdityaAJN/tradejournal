@@ -28,9 +28,8 @@ function Login() {
         password
       });
 
-      console.log("LOGIN RESPONSE:", res.data);
-
-      const token = res.data.token;
+      // FIX 4: Backend returns the JWT string directly, not an object with .token
+      const token = res.data;
 
       localStorage.setItem("token", token);
 
@@ -87,10 +86,7 @@ function Login() {
 
         <p className="text-gray-400 mt-5 text-center">
           Don't have an account?
-          <Link
-            to="/register"
-            className="text-blue-400 ml-2"
-          >
+          <Link to="/register" className="text-blue-400 ml-2">
             Register
           </Link>
         </p>

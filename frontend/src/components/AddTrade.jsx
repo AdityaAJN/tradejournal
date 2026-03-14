@@ -4,45 +4,58 @@ import axios from "axios";
 function AddTrade() {
 
   const API = "https://tradejournal-backend-uwpp.onrender.com";
+  const token = localStorage.getItem("token");
 
   const [symbol, setSymbol] = useState("");
+  // FIX 7: Added tradeType state
+  const [tradeType, setTradeType] = useState("BUY");
   const [entryPrice, setEntryPrice] = useState("");
   const [exitPrice, setExitPrice] = useState("");
   const [quantity, setQuantity] = useState("");
+  // FIX 7: Added tradeDate state
+  const [tradeDate, setTradeDate] = useState("");
   const [notes, setNotes] = useState("");
 
   const addTrade = async () => {
 
-    if (!symbol || !entryPrice || !quantity) {
-      alert("Symbol, Entry Price and Quantity required");
+    if (!symbol || !entryPrice || !quantity || !tradeDate) {
+      alert("Symbol, Entry Price, Quantity and Date are required");
       return;
     }
 
     try {
 
-      const res = await axios.post(`${API}/api/trades`, {
-        symbol: symbol,
-        entryPrice: Number(entryPrice),
-        exitPrice: exitPrice ? Number(exitPrice) : null,
-        quantity: Number(quantity),
-        notes: notes
-      });
+      const res = await axios.post(
+        `${API}/api/trades`,
+        {
+          symbol: symbol,
+          // FIX 7: Send tradeType and tradeDate to backend
+          tradeType: tradeType,
+          tradeDate: tradeDate,
+          entryPrice: Number(entryPrice),
+          exitPrice: exitPrice ? Number(exitPrice) : null,
+          quantity: Number(quantity),
+          notes: notes
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
 
       console.log(res.data);
-
       alert("Trade Added Successfully");
 
       setSymbol("");
+      setTradeType("BUY");
       setEntryPrice("");
       setExitPrice("");
       setQuantity("");
+      setTradeDate("");
       setNotes("");
 
     } catch (err) {
-
       console.error(err);
       alert("Failed to add trade");
-
     }
 
   };
@@ -53,9 +66,27 @@ function AddTrade() {
 
       <input
         className="bg-white text-black p-2 rounded w-full"
-        placeholder="Symbol"
+        placeholder="Symbol (e.g. AAPL)"
         value={symbol}
         onChange={(e) => setSymbol(e.target.value)}
+      />
+
+      {/* FIX 7: TradeType dropdown */}
+      <select
+        className="bg-white text-black p-2 rounded w-full"
+        value={tradeType}
+        onChange={(e) => setTradeType(e.target.value)}
+      >
+        <option value="BUY">BUY</option>
+        <option value="SELL">SELL</option>
+      </select>
+
+      {/* FIX 7: Trade date input */}
+      <input
+        className="bg-white text-black p-2 rounded w-full"
+        type="date"
+        value={tradeDate}
+        onChange={(e) => setTradeDate(e.target.value)}
       />
 
       <input

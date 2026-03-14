@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,58 +11,76 @@ import {
   Legend
 } from "chart.js";
 
-ChartJS.register(
-  LineElement,
-  PointElement,
-  LinearScale,
-  CategoryScale,
-  Tooltip,
-  Legend
-);
+ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
 
 function EquityChart() {
 
-  const trades = JSON.parse(localStorage.getItem("trades")) || [];
+  const API = "https://tradejournal-backend-uwpp.onrender.com";
+  const token = localStorage.getItem("token");
 
-  let equity = 100;
-
-  const equityData = [equity];
-
-  trades.forEach(trade => {
-    equity += trade.pnl;
-    equityData.push(equity);
+  const [equityData, setEquityData] = useState([100]);
+  const [labels, setLabels]         = useState(["Start"]);
+  const [metrics, setMetrics]       = useState({
+    maxDrawdown: "0.00",
+    profitFactor: "0.00",
+    avgWin: "0.00",
+    avgLoss: "0.00"
   });
 
-  const labels = ["Start", ...trades.map((_, i) => `Trade ${i + 1}`)];
+  useEffect(() => {
 
-  // ----- METRICS -----
+    // FIX 9: Fetch from backend instead of localStorage
+    const fetchTrades = async () => {
 
-  const wins = trades.filter(t => t.pnl > 0);
-  const losses = trades.filter(t => t.pnl < 0);
+      try {
 
-  const totalProfit = wins.reduce((a,b)=>a+b.pnl,0);
-  const totalLoss = Math.abs(losses.reduce((a,b)=>a+b.pnl,0));
+        const res = await axios.get(`${API}/api/trades`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
 
-  const avgWin = wins.length ? (totalProfit / wins.length).toFixed(2) : "0.00";
-const avgLoss = losses.length ? (totalLoss / losses.length).toFixed(2) : "0.00";
-const profitFactor = totalLoss ? (totalProfit / totalLoss).toFixed(2) : "0.00";
-  // Max Drawdown
-  let peak = equityData[0];
-  let maxDrawdown = 0;
+        const trades = res.data;
 
-  equityData.forEach(value => {
+        if (trades.length === 0) return;
 
-    if(value > peak) peak = value;
+        let equity = 100;
+        const eqData = [equity];
 
-    const drawdown = peak - value;
+        trades.forEach(trade => {
+          equity += trade.profitLoss;
+          eqData.push(equity);
+        });
 
-    if(drawdown > maxDrawdown)
-      maxDrawdown = drawdown;
+        setEquityData(eqData);
+        setLabels(["Start", ...trades.map((_, i) => `Trade ${i + 1}`)]);
 
-  });
-  maxDrawdown = maxDrawdown.toFixed(2);
+        const wins   = trades.filter(t => t.profitLoss > 0);
+        const losses = trades.filter(t => t.profitLoss < 0);
 
-  // ----- CHART DATA -----
+        const totalProfit = wins.reduce((a, b) => a + b.profitLoss, 0);
+        const totalLoss   = Math.abs(losses.reduce((a, b) => a + b.profitLoss, 0));
+
+        const avgWin       = wins.length   ? (totalProfit / wins.length).toFixed(2)   : "0.00";
+        const avgLoss      = losses.length ? (totalLoss   / losses.length).toFixed(2) : "0.00";
+        const profitFactor = totalLoss     ? (totalProfit / totalLoss).toFixed(2)     : "0.00";
+
+        let peak = eqData[0], maxDrawdown = 0;
+        eqData.forEach(v => {
+          if (v > peak) peak = v;
+          const dd = peak - v;
+          if (dd > maxDrawdown) maxDrawdown = dd;
+        });
+
+        setMetrics({ maxDrawdown: maxDrawdown.toFixed(2), profitFactor, avgWin, avgLoss });
+
+      } catch (err) {
+        console.error("EquityChart fetch error:", err);
+      }
+
+    };
+
+    fetchTrades();
+
+  }, []);
 
   const data = {
     labels,
@@ -73,9 +93,7 @@ const profitFactor = totalLoss ? (totalProfit / totalLoss).toFixed(2) : "0.00";
         segment: {
           borderColor: ctx => {
             const { p0, p1 } = ctx;
-            return p1.parsed.y >= p0.parsed.y
-              ? "#22c55e"
-              : "#ef4444";
+            return p1.parsed.y >= p0.parsed.y ? "#22c55e" : "#ef4444";
           }
         },
         pointRadius: 4
@@ -84,11 +102,7 @@ const profitFactor = totalLoss ? (totalProfit / totalLoss).toFixed(2) : "0.00";
   };
 
   const options = {
-    plugins: {
-      legend: {
-        labels: { color: "white" }
-      }
-    },
+    plugins: { legend: { labels: { color: "white" } } },
     scales: {
       x: { ticks: { color: "white" } },
       y: { ticks: { color: "white" } }
@@ -101,28 +115,26 @@ const profitFactor = totalLoss ? (totalProfit / totalLoss).toFixed(2) : "0.00";
 
       <h2 className="text-white text-xl mb-4">Performance</h2>
 
-      {/* Metrics */}
-
       <div className="grid grid-cols-4 gap-4 mb-6">
 
         <div className="bg-gray-700 p-4 rounded">
           <p className="text-gray-300 text-sm">Max Drawdown</p>
-          <p className="text-red-400 text-xl font-bold">₹{maxDrawdown}</p>
+          <p className="text-red-400 text-xl font-bold">₹{metrics.maxDrawdown}</p>
         </div>
 
         <div className="bg-gray-700 p-4 rounded">
           <p className="text-gray-300 text-sm">Profit Factor</p>
-          <p className="text-green-400 text-xl font-bold">{profitFactor}</p>
+          <p className="text-green-400 text-xl font-bold">{metrics.profitFactor}</p>
         </div>
 
         <div className="bg-gray-700 p-4 rounded">
           <p className="text-gray-300 text-sm">Average Win</p>
-          <p className="text-green-400 text-xl font-bold">₹{avgWin}</p>
+          <p className="text-green-400 text-xl font-bold">₹{metrics.avgWin}</p>
         </div>
 
         <div className="bg-gray-700 p-4 rounded">
           <p className="text-gray-300 text-sm">Average Loss</p>
-          <p className="text-red-400 text-xl font-bold">₹{avgLoss}</p>
+          <p className="text-red-400 text-xl font-bold">₹{metrics.avgLoss}</p>
         </div>
 
       </div>
