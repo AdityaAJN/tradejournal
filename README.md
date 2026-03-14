@@ -199,18 +199,13 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 
 ---
 
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 📬 Contact
 
 **Aditya**  
-📧 your.email@example.com  
-🔗 [LinkedIn](https://linkedin.com/in/yourprofile)  
-🐙 [GitHub](https://github.com/your-username)
+📧 adityajiwan16@gmail.com 
+🔗 [LinkedIn](https://linkedin.com/in/adityajiwan)  
+🐙 [GitHub](https://github.com/AdityaAJN)
 
 ---
 
