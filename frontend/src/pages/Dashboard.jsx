@@ -2,7 +2,7 @@ import AddTrade from "../components/AddTrade";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import SummaryCards from "../components/SummaryCards";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import MarketHeatmap from "../components/MarketHeatmap";
 import axios from "axios";
 
@@ -28,14 +28,10 @@ function Dashboard() {
     if (!token) {
      navigate("/login");
     }
-  }, []);
+  }, [navigate]);
 
   // LOAD TRADES FROM BACKEND
-  useEffect(() => {
-    fetchTrades();
-  }, []);
-
-  const fetchTrades = async () => {
+  const fetchTrades = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(`${API}/api/trades`, {
@@ -45,7 +41,11 @@ function Dashboard() {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [API]);
+
+  useEffect(() => {
+    fetchTrades();
+  }, [fetchTrades]);
 
   // CAPITAL USED + BALANCE
   const calculateCapital = (trades) => {
