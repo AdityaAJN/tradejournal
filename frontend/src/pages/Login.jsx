@@ -46,7 +46,8 @@ function Login() {
       if (err.code === "ECONNABORTED") {
         alert("Timed out. Backend is still waking up. Please try again.");
       } else if (err.response) {
-        alert(err.response.data || "Invalid credentials");
+        const errorMsg = typeof err.response.data === "string" ? err.response.data : "Invalid credentials";
+        alert(errorMsg);
       } else {
         alert("Server not responding. Try again in 30 seconds.");
       }
