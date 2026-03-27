@@ -2,6 +2,7 @@ import Sidebar from "../components/Sidebar";
 import EquityChart from "../components/EquityChart";
 import ProfitHeatmap from "../components/ProfitHeatmap";
 import TradeDistribution from "../components/TradeDistribution";
+import GeographyAnalysis from "../components/GeographyAnalysis";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
@@ -135,6 +136,11 @@ function Performance() {
         <div className="bg-gray-800 p-5 rounded-xl shadow mb-6">
           <h2 className="text-white text-lg mb-4">Trade Type Performance</h2>
           <Bar data={barChart} />
+        </div>
+
+        <div className="mb-6">
+          <h2 className="text-white text-lg mb-4">Geography Analysis</h2>
+          <GeographyAnalysis />
         </div>
 
         <EquityChart />

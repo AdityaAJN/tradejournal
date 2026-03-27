@@ -15,6 +15,7 @@ function AddTrade() {
   // FIX 7: Added tradeDate state
   const [tradeDate, setTradeDate] = useState("");
   const [notes, setNotes] = useState("");
+  const [marketGeography, setMarketGeography] = useState("NATIONAL");
 
   const addTrade = async () => {
 
@@ -35,7 +36,8 @@ function AddTrade() {
           entryPrice: Number(entryPrice),
           exitPrice: exitPrice ? Number(exitPrice) : null,
           quantity: Number(quantity),
-          notes: notes
+          notes: notes,
+          marketGeography: marketGeography
         },
         {
           headers: { Authorization: `Bearer ${token}` }
@@ -52,6 +54,7 @@ function AddTrade() {
       setQuantity("");
       setTradeDate("");
       setNotes("");
+      setMarketGeography("NATIONAL");
 
     } catch (err) {
       console.error(err);
@@ -79,6 +82,16 @@ function AddTrade() {
       >
         <option value="BUY">BUY</option>
         <option value="SELL">SELL</option>
+      </select>
+
+      {/* Market Geography dropdown */}
+      <select
+        className="bg-white text-black p-2 rounded w-full"
+        value={marketGeography}
+        onChange={(e) => setMarketGeography(e.target.value)}
+      >
+        <option value="NATIONAL">National</option>
+        <option value="INTERNATIONAL">International</option>
       </select>
 
       {/* FIX 7: Trade date input */}

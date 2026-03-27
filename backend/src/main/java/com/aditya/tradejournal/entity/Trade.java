@@ -37,6 +37,10 @@ public class Trade {
 
     @Column(length = 1000)
     private String notes;
+
+    @Enumerated(EnumType.STRING)
+    private MarketGeography marketGeography;
+
     @JsonIgnore
 @ManyToOne(fetch = FetchType.LAZY)
 @JoinColumn(name = "user_id", nullable = false)
