@@ -40,6 +40,7 @@ public class TradeService {
                 .quantity(request.getQuantity())
                 .profitLoss(profitLoss)
                 .notes(request.getNotes())
+                .marketGeography(request.getMarketGeography())
                 .user(user)
                 .build();
 
